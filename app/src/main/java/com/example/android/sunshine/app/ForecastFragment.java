@@ -199,6 +199,11 @@ public class ForecastFragment extends Fragment {
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
 
+            //make sure the method returns the data as it should by logging the output
+            for (String s : resultStrs) {
+                Log.v(LOG_TAG, "Forecast entry: "+ s);
+
+            }
             return resultStrs;
         }
 
@@ -219,7 +224,7 @@ public class ForecastFragment extends Fragment {
             // Will contain the raw JSON response as a string.
             String forecastJsonStr = null;
             String format = "json";
-            String units = "metric";
+            String units = "imperial";
             int numDays = 7;
 
             try {
@@ -292,6 +297,15 @@ public class ForecastFragment extends Fragment {
                     }
                 }
             }
+            //try to return the data obtained from the getWeatherDataFromJson method
+           try {
+               return getWeatherDataFromJson(forecastJsonStr, numDays);
+           }catch(JSONException e) {
+                Log.e(LOG_TAG, e.getMessage(),e);
+               e.printStackTrace();
+            }
+
+            //this will only happen if there was an error getting or parsing the forecast
             return null; 
         }
 
