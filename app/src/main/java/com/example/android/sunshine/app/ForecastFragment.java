@@ -112,9 +112,11 @@ public class ForecastFragment extends Fragment {
     }
 
     //AsyncTask is defined by 3 generic types: params, progress, and results.
-    //we could have AsyncTask<URL, Integer, Long> which uses the doInBackground(URL... urls)
-    //method to get the data, the onProgressUpdate(Integer... progress) method to update the user
-    //on the download progress and the onPostExecute(Long result) method to show the user results
+    //we will have AsyncTask<URL, Void, String[]> which uses the doInBackground(URL... urls)
+    //method to get the data, doesn't use the onProgressUpdate(Integer... progress) method to
+    //update the user on the download progress and the getWeatherDataFromJson(String int) method
+    // to return the results as a string array.
+
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         /* The date/time conversion code is going to be moved outside the asynctask later,
@@ -159,10 +161,14 @@ public class ForecastFragment extends Fragment {
             final String OWM_DATETIME = "dt";
             final String OWM_DESCRIPTION = "main";
 
+            //convert json string to a json object
             JSONObject forecastJson = new JSONObject(forecastJsonStr);
+            //get the array "list" from the json object and set it equal to "weatherArray"
             JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
-
+            //create a string array to hold the results. it will hold a number of strings equal
+            //to the number of days requested
             String[] resultStrs = new String[numDays];
+
             for (int i = 0; i < weatherArray.length(); i++) {
                 // For now, using the format "Day, description, hi/low"
                 String day;
@@ -170,6 +176,7 @@ public class ForecastFragment extends Fragment {
                 String highAndLow;
 
                 // Get the JSON object representing the day
+                //iterate through the list array, storing the forecasts as json objects
                 JSONObject dayForecast = weatherArray.getJSONObject(i);
 
                 // The date/time is returned as a long.  We need to convert that
