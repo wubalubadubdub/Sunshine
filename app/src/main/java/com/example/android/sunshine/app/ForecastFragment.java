@@ -292,7 +292,7 @@ public class ForecastFragment extends Fragment {
                     }
                 }
             }
-            return null;
+            return null; 
         }
 
 
